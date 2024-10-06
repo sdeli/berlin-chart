@@ -1,0 +1,14 @@
+global:
+  namespace: preprod
+
+frontend:
+  replicaCount: 1
+
+backend:
+  replicaCount: 1
+
+postgresql:
+  database:
+    name: preprod_db
+    username: preprod_user
+    password: preprod_password

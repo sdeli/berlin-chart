@@ -1,0 +1,11 @@
+global:
+  namespace: test
+
+frontend:
+  replicaCount: 1
+
+backend:
+  replicaCount: 1
+
+postgresql:
+  version: 

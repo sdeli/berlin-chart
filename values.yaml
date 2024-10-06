@@ -1,0 +1,22 @@
+frontend:
+  image:
+    repository: registry.digitalocean.com/artifact-store/berlin-ionic
+  replicaCount: 2
+  service:
+    type: ClusterIP
+    port: 80
+
+backend:
+  image:
+    repository: my-backend-image
+  replicaCount: 2
+  service:
+    type: ClusterIP
+    port: 8080
+
+postgresql:
+  image:
+    repository: postgres
+  service:
+    type: ClusterIP
+    port: 5432

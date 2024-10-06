@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"  # Must match the Ingress Controller in your cluster
+spec:
+  rules:
+    - host: "frontend.example.com"  # Hostname that routes traffic to your service
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend  # Kubernetes service handling the traffic
+                port:
+                  number: 80

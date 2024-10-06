@@ -1,0 +1,14 @@
+global:
+  namespace: prod
+
+frontend:
+  replicaCount: 1
+
+backend:
+  replicaCount: 1
+
+postgresql:
+  database:
+    name: prod_db
+    username: prod_user
+    password: prod_password
