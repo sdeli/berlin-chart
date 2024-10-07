@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: berlin-ionic
   namespace: {{ .Values.global.namespace }}
 spec:
-  type: {{ .Values.frontend.service.type }}
+  type: ClusterIP
   selector:
-    app: frontend
+    app: berlin-ionic
   ports:
-    - port: {{ .Values.frontend.service.port }}
+    - port: 80
       targetPort: 80

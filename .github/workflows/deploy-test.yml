@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Deploy to Kubernetes test env
 
 on:
   workflow_dispatch:
@@ -11,22 +11,35 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install envsubst
-      run: sudo apt-get install -y gettext
-
-    - name: Set up Kubernetes
-      uses: azure/setup-kubectl@v2
+    - name: Set up DigitalOcean kubectl
+      uses: digitalocean/action-doctl@v2
       with:
-        version: '1.29.2'
-
-    - name: Set up Helm
-      uses: azure/setup-helm@v1
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
     - name: Deploy to Test Environment
       run: |
-        helm upgrade --install my-app ./my-app \
+        echo 'Logging into to DigitalOcean Container Registry'
+        echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u "${{ secrets.DIGITALOCEAN_USERNAME }}" --password-stdin
+
+        echo 'Setting up Helm'
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        helm upgrade --install berlin-release-test ./berlin-chart \
           --namespace test \
-          --values ./values-test.yaml
-          -set postgresql.database.name=${{ secrets.TEST_DATABASE_NAME }}
-          -set postgresql.database.username=${{ secrets.TEST_DATABASE_USERNAME }}
-          -set postgresql.database.password=${{ secrets.TEST_DATABASE_PASSWORD }}
+          --values ./values-test.yaml \
+
+          --set frontend.env.name=${{ secrets.TEST_ENV }} \
+          --set frontend.url=${{ secrets.TEST_URL }} \
+
+          --set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \
+          --set backend.envs.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
+          --set backend.envs.env=${{ secrets.TEST_ENV }} \
+          --set backend.envs.dbName=${{ secrets.TEST_DATABASE_NAME }} \
+          --set backend.envs.dbUserName=${{ secrets.TEST_DATABASE_USERNAME }} \
+          --set backend.envs.dbPassword=${{ secrets.TEST_DATABASE_PASSWORD }} \
+
+          --set postgresq.name=${{ secrets.TEST_DATABASE_NAME }} \
+          --set postgresq.userName=${{ secrets.TEST_DATABASE_USERNAME }} \
+          --set postgresq.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
+          --atomic \
+          --timeout 10m \
+          --wait

@@ -1,23 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: berlin-ionic
   namespace: {{ .Values.global.namespace }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      app: frontend
+      app: berlin-ionic
   template:
     metadata:
       labels:
-        app: frontend
+        app: berlin-ionic
     spec:
       containers:
-        - name: frontend
-          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        - name: berlin-ionic
+          image: "registry.digitalocean.com/artifact-store/berlin:berlin-ionic-{{ .Values.frontend.image.tag }}"
           ports:
             - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+              host: berlin-api.{{ .Values.global.namespace }}.svc.cluster.local
+            initialDelaySeconds: 10
+            periodSeconds: 5
           env: 
             - name: VITE_ENV
               value: "{{.Values.frontend.env.name}}"
+            - name: VITE_URL
+              value: "{{.Values.frontend.url}}"

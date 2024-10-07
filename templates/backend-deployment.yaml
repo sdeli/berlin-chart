@@ -1,20 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: berlin-api
   namespace: {{ .Values.global.namespace }}
 spec:
   replicas: {{ .Values.backend.replicaCount }}
   selector:
     matchLabels:
-      app: backend
+      app: berlin-api
   template:
     metadata:
       labels:
-        app: backend
+        app: berlin-api
     spec:
       containers:
-        - name: backend
-          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        - name: berlin-api
+          image: "registry.digitalocean.com/artifact-store/berlin:berlin-api-{{ .Values.backend.image.tag }}"
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -h
+                - postgres
+                - -p
+                - "5432"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          env:
+            - name: JWT_SECRET
+              value: {{ .Values.backend.envs.jwtSecret }}
+            - name: JWT_REFRESH_SECRET
+              value: {{ .Values.backend.envs.jwtRefreshSecret }}
+            - name: ENV
+              value: {{ .Values.backend.envs.env }}
+            - name: DB_NAME
+              value: {{ .Values.backend.envs.dbName }}
