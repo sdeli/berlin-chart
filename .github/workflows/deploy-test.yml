@@ -6,40 +6,61 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Write Encoded Secrets to File
+        run: |
+          echo "Contents of the root directory:"
+          ls -al /
+          echo "Contents of the home directory:"
+          ls -al $HOME
+          echo "Contents of the current working directory:"
+          ls -al .
+    
+    # - name: Checkout code
+    #   uses: actions/checkout@v2
 
-    - name: Set up DigitalOcean kubectl
-      uses: digitalocean/action-doctl@v2
-      with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    # - name: Set up DigitalOcean kubectl
+    #   uses: digitalocean/action-doctl@v2
+    #   with:
+    #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-    - name: Deploy to Test Environment
-      run: |
-        echo 'Logging into to DigitalOcean Container Registry'
-        echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u "${{ secrets.DIGITALOCEAN_USERNAME }}" --password-stdin
+    # - name: Deploy to Test Environment
+    #   run: |
+    #     echo "${{ secrets.TEST_ENV }}"
+    #     echo "${{ secrets.TEST_URL }}"
+    #     echo "${{ secrets.JWT_SECRET }}"
+    #     echo "${{ secrets.JWT_REFRESH_SECRET }}"
+    #     echo "${{ secrets.TEST_DATABASE_NAME }}"
+    #     echo "${{ secrets.TEST_DATABASE_USERNAME }}"
+    #     echo "${{ secrets.TEST_DATABASE_PASSWORD }}"
+    #     echo "${{ secrets.TEST_DATABASE_NAME }}"
+    #     echo "${{ secrets.TEST_DATABASE_USERNAME }}"
 
-        echo 'Setting up Helm'
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-        helm upgrade --install berlin-release-test ./berlin-chart \
-          --namespace test \
-          --values ./values-test.yaml \
+    #     echo 'Logging into to DigitalOcean Container Registry'
+    #     echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u "${{ secrets.DIGITALOCEAN_USERNAME }}" --password-stdin
 
-          --set frontend.env.name=${{ secrets.TEST_ENV }} \
-          --set frontend.url=${{ secrets.TEST_URL }} \
+    #     echo 'Setting up Helm'
+    #     curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    #     helm upgrade --install berlin-release-test ./berlin-chart \
+    #       --namespace test \
+    #       --values ./values-test.yaml \
 
-          --set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \
-          --set backend.envs.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
-          --set backend.envs.env=${{ secrets.TEST_ENV }} \
-          --set backend.envs.dbName=${{ secrets.TEST_DATABASE_NAME }} \
-          --set backend.envs.dbUserName=${{ secrets.TEST_DATABASE_USERNAME }} \
-          --set backend.envs.dbPassword=${{ secrets.TEST_DATABASE_PASSWORD }} \
+    #       --set frontend.env.name=${{ secrets.TEST_ENV }} \
+    #       --set frontend.url=${{ secrets.TEST_URL }} \
 
-          --set postgresq.name=${{ secrets.TEST_DATABASE_NAME }} \
-          --set postgresq.userName=${{ secrets.TEST_DATABASE_USERNAME }} \
-          --set postgresq.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
-          --atomic \
-          --timeout 10m \
-          --wait
+    #       --set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \
+    #       --set backend.envs.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
+    #       --set backend.envs.env=${{ secrets.TEST_ENV }} \
+    #       --set backend.envs.dbName=${{ secrets.TEST_DATABASE_NAME }} \
+    #       --set backend.envs.dbUserName=${{ secrets.TEST_DATABASE_USERNAME }} \
+    #       --set backend.envs.dbPassword=${{ secrets.TEST_DATABASE_PASSWORD }} \
+
+    #       --set postgresq.name=${{ secrets.TEST_DATABASE_NAME }} \
+    #       --set postgresq.userName=${{ secrets.TEST_DATABASE_USERNAME }} \
+    #       --set postgresq.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
+    #       --atomic \
+    #       --timeout 10m \
+    #       --wait
