@@ -5,6 +5,8 @@ frontend:
   replicaCount: 1
   service:
     port: 80
+  env:
+    name: 'set in deploy file'
 
 backend:
   replicaCount: 1

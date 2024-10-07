@@ -20,13 +20,18 @@ jobs:
       run: |
         echo 'Logging into to DigitalOcean Container Registry'
         echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u "${{ secrets.DIGITALOCEAN_USERNAME }}" --password-stdin
-
+        
         echo 'Setting up Helm'
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-        helm upgrade --install berlin-release-test ./berlin-chart \
+        
+        echo 'Create kubeconfig file'
+        echo "${{ secrets.KUBECONFIG }}" > $HOME/config
+
+        helm upgrade --install berlin-release-test ./ \
+          --kubeconfig $HOME/config \
           --namespace test \
           --values ./values-test.yaml \
-
+          
           --set frontend.env.name=${{ secrets.TEST_ENV }} \
           --set frontend.url=${{ secrets.TEST_URL }} \
 
@@ -43,3 +48,4 @@ jobs:
           --atomic \
           --timeout 10m \
           --wait
+          --debug --dry-run
