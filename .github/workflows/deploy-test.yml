@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Deploy to Kubernetes test env
 
 on:
   workflow_dispatch:
@@ -24,9 +24,21 @@ jobs:
 
     - name: Deploy to Test Environment
       run: |
-        helm upgrade --install my-app ./my-app \
+        helm upgrade --install berlin-release-test ./berlin-chart \
           --namespace test \
-          --values ./values-test.yaml
-          -set postgresql.database.name=${{ secrets.TEST_DATABASE_NAME }}
-          -set postgresql.database.username=${{ secrets.TEST_DATABASE_USERNAME }}
-          -set postgresql.database.password=${{ secrets.TEST_DATABASE_PASSWORD }}
+          --values ./values-test.yaml \
+
+          -set frontend.env.name=${{ secrets.TEST_ENV }} \
+          -set frontend.url=${{ secrets.TEST_URL }} \
+
+          -set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \
+          -set backend.envs.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
+          -set backend.envs.env=${{ secrets.TEST_ENV }} \
+          -set backend.envs.dbName=${{ secrets.TEST_DATABASE_NAME }} \
+          -set backend.envs.dbUserName=${{ secrets.TEST_DATABASE_USERNAME }} \
+          -set backend.envs.dbPassword=${{ secrets.TEST_DATABASE_PASSWORD }} \
+
+          -set postgresq.name=${{ secrets.TEST_DATABASE_NAME }} \
+          -set postgresq.userName=${{ secrets.TEST_DATABASE_NAME }} \
+          -set postgresq.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
+          --wait --timeout 15m0s
