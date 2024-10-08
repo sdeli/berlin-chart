@@ -1,5 +1,5 @@
 global:
-  namespace: test
+  namespace: 'set it in deploy file'
 
 frontend:
   replicaCount: 1

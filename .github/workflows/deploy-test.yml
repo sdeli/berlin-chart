@@ -31,21 +31,19 @@ jobs:
           --kubeconfig $HOME/config \
           --namespace test \
           --values ./values-test.yaml \
-          
+          --set global.namespace=${{ secrets.TEST_ENV }} \
           --set frontend.envs.name=${{ secrets.TEST_ENV }} \
           --set frontend.url=${{ secrets.TEST_URL }} \
-
           --set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \
           --set backend.envs.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
           --set backend.envs.env=${{ secrets.TEST_ENV }} \
           --set backend.envs.dbName=${{ secrets.TEST_DATABASE_NAME }} \
           --set backend.envs.dbUserName=${{ secrets.TEST_DATABASE_USERNAME }} \
           --set backend.envs.dbPassword=${{ secrets.TEST_DATABASE_PASSWORD }} \
-
           --set postgresq.name=${{ secrets.TEST_DATABASE_NAME }} \
           --set postgresq.userName=${{ secrets.TEST_DATABASE_USERNAME }} \
           --set postgresq.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
           --atomic \
           --timeout 10m \
-          --wait
+          --wait \
           --debug --dry-run
