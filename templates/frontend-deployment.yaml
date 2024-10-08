@@ -27,6 +27,6 @@ spec:
             periodSeconds: 5
           env: 
             - name: VITE_ENV
-              value: "{{.Values.frontend.env.name}}"
+              value: "{{.Values.frontend.envs.name}}"
             - name: VITE_URL
               value: "{{.Values.frontend.url}}"

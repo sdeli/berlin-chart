@@ -32,7 +32,7 @@ jobs:
           --namespace test \
           --values ./values-test.yaml \
           
-          --set frontend.env.name=${{ secrets.TEST_ENV }} \
+          --set frontend.envs.name=${{ secrets.TEST_ENV }} \
           --set frontend.url=${{ secrets.TEST_URL }} \
 
           --set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \

@@ -5,11 +5,22 @@ frontend:
   replicaCount: 1
   service:
     port: 80
-  env:
-    name: 'set in deploy file'
+  url: 'set it in deploy file'
+  envs:
+    name: 'set it in deploy file'
 
 backend:
   replicaCount: 1
+  envs:
+    jwtSecret: 'set it in deploy file'
+    jwtRefreshSecret: 'set it in deploy file'
+    env: 'set it in deploy file'
+    dbName: 'set it in deploy file'
+    dbUserName: 'set it in deploy file'
+    dbPassword: 'set it in deploy file'
 
 postgresql:
   version: 17.0
+  name: 'set it in deploy file'
+  userName: 'set it in deploy file'
+  password: 'set it in deploy file'
