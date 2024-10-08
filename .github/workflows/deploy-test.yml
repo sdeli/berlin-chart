@@ -47,3 +47,6 @@ jobs:
           --timeout 10m \
           --wait \
           --debug --dry-run
+          
+        echo 'Waiting for all pods to be in Running state'
+        kubectl wait --for=condition=ready pod --all --namespace test --timeout=600s
