@@ -20,15 +20,16 @@ jobs:
       run: |
         echo 'Logging into to DigitalOcean Container Registry'
         echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u "${{ secrets.DIGITALOCEAN_USERNAME }}" --password-stdin
+        doctl registry login
         
         echo 'Setting up Helm'
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         
         echo 'Create kubeconfig file'
-        echo "${{ secrets.KUBECONFIG }}" > $HOME/config
+        echo "${{ secrets.KUBECONFIG }}" > /home/runner/config.txt
+        export KUBECONFIG=/home/runner/config.txt
 
         helm upgrade --install berlin-release-test ./ \
-          --kubeconfig $HOME/config \
           --namespace test \
           --values ./values-test.yaml \
           --set global.namespace=${{ secrets.TEST_ENV }} \
@@ -46,7 +47,7 @@ jobs:
           --atomic \
           --timeout 10m \
           --wait \
-          --debug --dry-run
-          
+          --debug
+
         echo 'Waiting for all pods to be in Running state'
         kubectl wait --for=condition=ready pod --all --namespace test --timeout=600s
