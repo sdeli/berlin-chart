@@ -2,7 +2,7 @@ name: Deploy to Kubernetes test env
 
 env:
   BERLIN_IONIC_IMAGE_TAG: '0.2'
-  BERLIN_API_IMAGE_TAG: '0.5'
+  BERLIN_API_IMAGE_TAG: '0.7'
   CHART_VERSION: 0.1.0
 
 on:

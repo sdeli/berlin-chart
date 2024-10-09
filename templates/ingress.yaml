@@ -2,12 +2,19 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend-ingress
-  namespace: {{.Values.global.namespace}}
+  namespace: {{ .Values.global.namespace }}
   labels:
     app.kubernetes.io/managed-by: "Helm"
   annotations:
-    meta.helm.sh/release-name: "berlin-release-{{.Values.global.namespace}}"
-    meta.helm.sh/release-namespace: "{{.Values.global.namespace}}"
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: "berlin-release-{{ .Values.global.namespace }}"
+    meta.helm.sh/release-namespace: "{{ .Values.global.namespace }}"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      location ~* \.js$ {
+        add_header Content-Type application/javascript;
+        try_files $uri =404;
+      }
 spec:
   ingressClassName: "nginx"
   rules:
@@ -19,4 +26,11 @@ spec:
           service:
             name: berlin-ionic
             port:
-              number: {{ .Values.frontend.service.port }}
+              number: 80
+      - path: /api/?(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: berlin-api
+            port:
+              number: 80
