@@ -35,5 +35,11 @@ spec:
               value: {{ .Values.backend.envs.jwtRefreshSecret }}
             - name: ENV
               value: {{ .Values.backend.envs.env }}
+            - name: DB_HOST
+              value: postgres
             - name: DB_NAME
               value: {{ .Values.backend.envs.dbName }}
+            - name: DB_USERNAME
+              value: {{ .Values.backend.envs.dbUserName }}
+            - name: DB_PASSWORD
+              value: {{ .Values.backend.envs.dbPassword }}
