@@ -18,16 +18,16 @@ spec:
           image: "registry.digitalocean.com/artifact-store/berlin:berlin-api-{{ .Values.backend.image.tag }}"
           ports:
             - containerPort: 3000
-          # readinessProbe:
-          #   exec:
-          #     command:
-          #       - pg_isready
-          #       - -h
-          #       - postgres
-          #       - -p
-          #       - "5432"
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -h
+                - postgres
+                - -p
+                - "5432"
+            initialDelaySeconds: 10
+            periodSeconds: 5
           env:
             - name: JWT_SECRET
               value: {{ .Values.backend.envs.jwtSecret }}
