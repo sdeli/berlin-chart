@@ -49,9 +49,9 @@ jobs:
           --set backend.envs.dbName=${{ secrets.TEST_DATABASE_NAME }} \
           --set backend.envs.dbUserName=${{ secrets.TEST_DATABASE_USERNAME }} \
           --set backend.envs.dbPassword=${{ secrets.TEST_DATABASE_PASSWORD }} \
-          --set postgresq.name=${{ secrets.TEST_DATABASE_NAME }} \
-          --set postgresq.userName=${{ secrets.TEST_DATABASE_USERNAME }} \
-          --set postgresq.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
+          --set postgres.name=${{ secrets.TEST_DATABASE_NAME }} \
+          --set postgres.userName=${{ secrets.TEST_DATABASE_USERNAME }} \
+          --set postgres.password=${{ secrets.TEST_DATABASE_PASSWORD }} \
           --atomic \
           --timeout 10m \
           --wait \

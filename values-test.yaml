@@ -23,7 +23,7 @@ backend:
     dbUserName: 'set it in deploy file'
     dbPassword: 'set it in deploy file'
 
-postgresql:
+postgres:
   version: 17.0
   name: 'set it in deploy file'
   userName: 'set it in deploy file'
