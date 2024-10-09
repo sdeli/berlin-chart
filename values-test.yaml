@@ -3,6 +3,8 @@ global:
 
 frontend:
   replicaCount: 1
+  image:
+    tag: 'set it in deploy file'
   service:
     port: 80
   url: 'set it in deploy file'
@@ -11,6 +13,8 @@ frontend:
 
 backend:
   replicaCount: 1
+  image:
+    tag: 'set it in deploy file'
   envs:
     jwtSecret: 'set it in deploy file'
     jwtRefreshSecret: 'set it in deploy file'

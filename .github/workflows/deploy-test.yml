@@ -1,5 +1,10 @@
 name: Deploy to Kubernetes test env
 
+env:
+  BERLIN_IONIC_IMAGE_TAG: '0.2'
+  BERLIN_API_IMAGE_TAG: '0.2'
+  CHART_VERSION: 0.1.0
+
 on:
   workflow_dispatch:
 
@@ -21,7 +26,7 @@ jobs:
         echo 'Logging into to DigitalOcean Container Registry'
         echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u "${{ secrets.DIGITALOCEAN_USERNAME }}" --password-stdin
         doctl registry login
-        
+
         echo 'Setting up Helm'
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         
@@ -30,11 +35,14 @@ jobs:
         export KUBECONFIG=/home/runner/config.txt
 
         helm upgrade --install berlin-release-test ./ \
+          --version $CHART_VERSION \
           --namespace test \
           --values ./values-test.yaml \
           --set global.namespace=${{ secrets.TEST_ENV }} \
           --set frontend.envs.name=${{ secrets.TEST_ENV }} \
           --set frontend.url=${{ secrets.TEST_URL }} \
+          --set frontend.image.tag=${{ env.BERLIN_IONIC_IMAGE_TAG }} \
+          --set backend.image.tag=${{ env.BERLIN_API_IMAGE_TAG }} \
           --set backend.envs.jwtSecret=${{ secrets.JWT_SECRET }} \
           --set backend.envs.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
           --set backend.envs.env=${{ secrets.TEST_ENV }} \
