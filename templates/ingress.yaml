@@ -23,10 +23,10 @@ spec:
             name: berlin-ionic
             port:
               number: 80
-      # - path: /api/?(.*)
-      #   pathType: ImplementationSpecific
-      #   backend:
-      #     service:
-      #       name: berlin-api
-      #       port:
-      #         number: 80
+      - path: /api/?(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: berlin-api
+            port:
+              number: 80
