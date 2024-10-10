@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: ingress-nginx
+data:
+  nginx.conf: |
+    http {
+        include       mime.types;
+        default_type  application/octet-stream;
+        # Explicit MIME types
+        types {
+            application/javascript  js;
+            text/css                css;
+            text/html               html;
+        }
+    }

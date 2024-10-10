@@ -38,6 +38,7 @@ jobs:
           --version $CHART_VERSION \
           --namespace test \
           --values ./values-test.yaml \
+          --set allowSnippetAnnotations=true \
           --set global.namespace=${{ secrets.TEST_ENV }} \
           --set frontend.envs.name=${{ secrets.TEST_ENV }} \
           --set frontend.url=${{ secrets.TEST_URL }} \

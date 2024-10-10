@@ -20,3 +20,13 @@ postgresql:
   service:
     type: ClusterIP
     port: 5432
+
+controller:
+  extraArgs:
+    allow-snippet-annotations: "true"
+  config:
+    custom-http-errors: "404,403,500,502,503,504"
+    use-forwarded-headers: "true"
+  configMapNamespace: ingress-nginx
+  configMap: nginx-config
+
