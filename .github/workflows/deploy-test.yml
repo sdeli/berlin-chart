@@ -16,6 +16,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Create debug file
+      run: |
+        echo "DIGITALOCEAN_ACCESS_TOKEN=${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" >> debug.txt
+        echo "DIGITALOCEAN_USERNAME=${{ secrets.DIGITALOCEAN_USERNAME }}" >> debug.txt
+        echo "JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}" >> debug.txt
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> debug.txt
+        echo "KUBECONFIG=${{ secrets.KUBECONFIG }}" >> debug.txt
+        echo "TEST_DATABASE_NAME=${{ secrets.TEST_DATABASE_NAME }}" >> debug.txt
+        echo "TEST_DATABASE_PASSWORD=${{ secrets.TEST_DATABASE_PASSWORD }}" >> debug.txt
+        echo "TEST_DATABASE_USERNAME=${{ secrets.TEST_DATABASE_USERNAME }}" >> debug.txt
+        echo "TEST_ENV=${{ secrets.TEST_ENV }}" >> debug.txt
+        echo "TEST_URL=${{ secrets.TEST_URL }}" >> debug.txt
+
+    - name: Upload debug file as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-file
+        path: debug.txt
+
     - name: Set up DigitalOcean kubectl
       uses: digitalocean/action-doctl@v2
       with:
